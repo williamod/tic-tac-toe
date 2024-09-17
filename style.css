@@ -1,0 +1,39 @@
+body {
+    background-color: rgb(46, 45, 45);
+}
+
+h1 {
+    color: white;
+    text-align: center;
+}
+
+h2 {
+    color: white;
+    text-align: center;
+}
+
+.board {
+    background-color: rebeccapurple;  
+    max-width: 1000px;
+    max-height: 1000px;   
+}
+
+.board #grid-container {
+    border: 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 12px;
+
+}
+
+.cell {
+    background-color: rgba(211, 211, 211, 0.534);
+    margin: 12px;
+    min-height: 300px;
+    font-size: calc(10vw + 10vh);
+    font-size: max(300px);
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}

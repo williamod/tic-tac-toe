@@ -1,9 +1,13 @@
+//board = [[' ',' ',' '],[' ',' ',' '],[' ',' ',' ']]
+//tie = [['X','O','X'],[' ','O','O'],['O','X','X']]
+
 board = [[' ',' ',' '],[' ',' ',' '],[' ',' ',' ']]
 players = ['X' , 'O']
 currentPlayer = players[0]
+turn = 1
 
 
-
+//FUNCTIONS
 function printBoard() {
     console.log(
         board[0][0] + '|' + board[0][1] + '|' + board[0][2] + '\n' +
@@ -29,10 +33,14 @@ function changePlayer() {
 }
 
 function annouceTurn() {
-    console.log('It is ' + currentPlayer + '\'s turn!')
+    message = 'It is ' + currentPlayer + '\'s turn!'
+    console.log(message)
+    document.querySelector('h2').innerText = message
+    
 }
 
 function takeTurn(x,y) {
+    turn += 1
     if (board[y][x] !== ' ') {
         console.log('Invalid square!')
         printBoard()
@@ -41,11 +49,18 @@ function takeTurn(x,y) {
 
     else {
         board[y][x] = currentPlayer
+        insertSymbol(x,y)
         if (checkWin() == true) {
             printBoard()
-            alert(currentPlayer + '\'s Win!')
-            clearBoard()
+            document.querySelector('h2').innerText = `${currentPlayer}'s Win!`
+            removeEvents()
+
+
         }
+        else if (checkTie() == true) {
+            document.querySelector('h2').innerText = 'Tie!'
+        }
+
         else {
             changePlayer()
             printBoard()
@@ -54,6 +69,13 @@ function takeTurn(x,y) {
     }
 }
 
+function insertSymbol(x,y) {
+    const xCoord = '[data-x=' + x.toString() + ']'
+    const yCoord = '[data-y=' + y.toString() + ']'
+    const selector = `.cell[data-x='${x}'][data-y='${y}']`
+    const pick = document.querySelector(selector)
+    pick.innerText= currentPlayer
+}
 
 function checkWin() {
     //row 1
@@ -116,7 +138,17 @@ function checkWin() {
             return true
         }
     }
+    
+    return false
+    
 
+    
+}
+
+function checkTie() {
+    if (turn == 9 && checkWin() == false) {
+        return true
+    }
     else {
         return false
     }
@@ -125,13 +157,31 @@ function checkWin() {
 function clearBoard() {
     board = [[' ',' ',' '],[' ',' ',' '],[' ',' ',' ']]
     currentPlayer = players[0]
+    turn = 1
+    const cellList = document.querySelectorAll('.cell')
+    cellList.forEach((element) => element.innerText = '')
     printBoard()
     annouceTurn()
 }
 
+//EVENT LISTENERS
 
+const buttonEvent = document.querySelector('.button')
+buttonEvent.addEventListener('click', () => {
+    clearBoard();
+});
+
+function addEvents() {
+    const allCells = document.querySelectorAll('.cell')
+    allCells.forEach((cell) => cell.addEventListener('click', () => {
+        const datax = parseInt(cell.getAttribute('data-x'));
+        const datay = parseInt(cell.getAttribute('data-y'));
+        takeTurn(datax,datay);
+    }));
+};
 
 
 
 printBoard()
 annouceTurn()
+addEvents()
